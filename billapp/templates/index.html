@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bill Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+  <!-- Navbar -->
+  <header class="bg-blue-600 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="#" class="text-xl font-bold">BillGen</a>
+      <nav>
+        <a href="#features" class="px-4 hover:text-blue-300">Features</a>
+        <a href="#about" class="px-4 hover:text-blue-300">About</a>
+        <a href="#contact" class="px-4 hover:text-blue-300">Contact</a>
+        <a href="#get-started" class="px-4 py-2 bg-blue-500 rounded hover:bg-blue-400">Get Started</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-20 px-4 text-center">
+    <h1 class="text-4xl font-extrabold leading-tight mb-4">Generate Bills Easily</h1>
+    <p class="text-lg mb-6">Create and manage bills effortlessly with our intuitive online platform. Get started today
+      and streamline your billing process.</p>
+    <a href="#" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg text-lg">Generate Bill</a>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <h2 class="text-3xl font-semibold mb-8">Features</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+
+        <div id="generate-bill" class="bg-gray-100 p-6 rounded-lg shadow-lg">
+          <h3 class="text-xl font-semibold mb-3">Easy Bill Creation</h3>
+          <p>Create professional bills in seconds with pre-filled templates or custom fields.</p>
+          <div class="mt-6">
+            <a href="{%url 'generate-bill'%}" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg text-lg">Generate Bill</a>
+          </div>
+        </div>
+
+
+        <div class="bg-gray-100 p-6 rounded-lg shadow-lg">
+          <h3 class="text-xl font-semibold mb-3">Downloadable Formats</h3>
+          <p>Download your generated bills in PDF or Excel formats for easy sharing and printing.</p>
+        </div>
+        <div class="bg-gray-100 p-6 rounded-lg shadow-lg">
+          <h3 class="text-xl font-semibold mb-3">Secure & Fast</h3>
+          <p>All your data is securely processed and stored with fast generation times.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <h2 class="text-3xl font-semibold mb-8">About BillGen</h2>
+      <p class="text-lg max-w-2xl mx-auto mb-8">BillGen is a simple yet powerful tool that enables individuals and
+        businesses to generate professional-looking bills quickly and efficiently. Whether you're a freelancer, a small
+        business owner, or an enterprise, we make billing as easy as a few clicks.</p>
+      <a href="#generate-bill" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg text-lg">Get
+        Started</a>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <!-- <section id="contact" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <h2 class="text-3xl font-semibold mb-8">Contact Us</h2>
+      <p class="text-lg max-w-2xl mx-auto mb-8">Have questions? Reach out to us, and we’ll get back to you as soon as
+        possible. We're here to help you with any inquiries you have regarding our service.</p>
+      <form class="max-w-lg mx-auto space-y-4">
+        <input type="text" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg" required>
+        <input type="email" placeholder="Your Email" class="w-full p-3 border border-gray-300 rounded-lg" required>
+        <textarea placeholder="Your Message" class="w-full p-3 border border-gray-300 rounded-lg" rows="4"
+          required></textarea>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg w-full">Send
+          Message</button>
+      </form>
+    </div>
+  </section> -->
+
+  <!-- Get Started Section -->
+  <section id="get-started" class="bg-blue-600 text-white py-20 px-4 text-center">
+    <h2 class="text-3xl font-semibold mb-8">Ready to Get Started</h2>
+    <p class="text-lg mb-6">Start generating your bills today and streamline your business operations.</p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-6">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <p>&copy; 2024 BillGen. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>

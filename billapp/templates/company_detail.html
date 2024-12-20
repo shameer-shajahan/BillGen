@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company and Receiver Details</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <form action="" method="post" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <div class="container">
+            <h1 class="flex items-center justify-center mt-10 text-3xl font-semibold text-gray-900 uppercase">Enter
+                Company Details</h1>
+
+            <div class="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 xl:col-span-6">
+
+                <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div class="sm:col-span-3">
+                        <label for="company_name" class="block text-sm font-medium text-gray-900">Enter Company Name</label>
+                        <div class="mt-2">
+                            <input type="text" name="company_name" id="company_name" autocomplete="organization"
+                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                        </div>
+                    </div>
+
+                    <div class="col-span-3">
+                        <div class="max-w-sm">
+                            <label for="company_logo" class="text-xs font-medium text-gray-500">Company Logo</label>
+                            <div class="relative z-0 mt-0.5 flex w-full">
+                                <input id="company_logo" type="file" name="company_logo"
+                                    class="block w-full cursor-pointer appearance-none rounded-md border border-gray-200 bg-white px-3 py-2 text-sm transition focus:z-10 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-3">
+                        <label for="company_email" class="block text-sm font-medium text-gray-900">Email Address</label>
+                        <div class="mt-2">
+                            <input id="company_email" name="company_email" type="email" autocomplete="email"
+                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-3">
+                        <label for="company_mobile" class="block text-sm font-medium text-gray-900">Phone No</label>
+                        <div class="mt-2">
+                            <input id="company_mobile" name="company_mobile" type="text"
+                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                        </div>
+                    </div>
+
+                    <div class="col-span-6">
+                        <label for="company_address" class="block text-sm font-medium text-gray-900">Street Address</label>
+                        <div class="mt-2">
+                            <input type="text" name="company_address" id="company_address" autocomplete="street-address"
+                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <label for="city" class="block text-sm font-medium text-gray-900">City</label>
+                        <div class="mt-2">
+                            <input type="text" name="city" id="city" autocomplete="address-level2"
+                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <label for="state" class="block text-sm font-medium text-gray-900">State / Province</label>
+                        <div class="mt-2">
+                            <input type="text" name="state" id="state" autocomplete="address-level1"
+                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <label for="postal_code" class="block text-sm font-medium text-gray-900">ZIP / Postal Code</label>
+                        <div class="mt-2">
+                            <input type="text" name="postal_code" id="postal_code" autocomplete="postal-code"
+                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Receiver Details -->
+            <h1 class="flex items-center justify-center mt-10 text-3xl font-semibold text-gray-900 uppercase">Enter
+                Receiver Details</h1>
+
+            <div class="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 xl:col-span-6">
+
+                <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div class="sm:col-span-3">
+                        <label for="receiver_name" class="block text-sm font-medium text-gray-900">Receiver Name</label>
+                        <div class="mt-2">
+                            <input type="text" name="receiver_name" id="receiver_name" autocomplete="name"
+                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-3">
+                        <label for="receiver_email" class="block text-sm font-medium text-gray-900">Email Address</label>
+                        <div class="mt-2">
+                            <input id="receiver_email" name="receiver_email" type="email" autocomplete="email"
+                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-3">
+                        <label for="receiver_mobile" class="block text-sm font-medium text-gray-900">Phone No</label>
+                        <div class="mt-2">
+                            <input id="receiver_mobile" name="receiver_mobile" type="text"
+                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                        </div>
+                    </div>
+
+                    <div class="col-span-6">
+                        <label for="receiver_address" class="block text-sm font-medium text-gray-900">Street Address</label>
+                        <div class="mt-2">
+                            <input type="text" name="receiver_address" id="receiver_address" autocomplete="street-address"
+                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit"
+                class="sm:col-span-6 mx-auto mt-6 block rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+
+        </div>
+
+    </form>
+</body>
+
+</html>
