@@ -1,152 +1,64 @@
 
 
+{%extends 'base.html'%}
+
+{%block main_block%}
+
 
 <div>
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
     
         <div class="container">
-            <!-- Title -->
-            <h1 class="flex items-center justify-center mt-10 text-3xl font-semibold text-gray-900 uppercase">
-                Enter Company Details
-            </h1>
-    
-            <!-- Company Details Section -->
-            <div class="px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 xl:col-span-6">
-                <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <!-- Company Name -->
-                    <div class="sm:col-span-3">
-                        <label for="company_name" class="block text-sm font-medium text-gray-900">Company Name</label>
-                        <div class="mt-2">
-                            <input type="text" name="company_name" id="company_name" placeholder="Enter company name"
-                                autocomplete="organization"
-                                class="block w-full rounded-md px-3 py-2 text-base outline outline-1 outline-gray-300 placeholder-gray-400 focus:outline-2 focus:outline-indigo-600">
-                        </div>
-                    </div>
-    
-                    <!-- Company Logo -->
-                    <div class="sm:col-span-3">
-                        <label for="company_logo" class="block text-sm font-medium text-gray-900">Company Logo</label>
-                        <div class="mt-2">
-                            <input type="file" name="company_logo" id="company_logo"
-                                class="block w-full cursor-pointer rounded-md px-3 py-2 text-sm border border-gray-300 focus:outline-indigo-600">
-                        </div>
-                    </div>
-    
-                    <!-- Email -->
-                    <div class="sm:col-span-3">
-                        <label for="company_email" class="block text-sm font-medium text-gray-900">Email Address</label>
-                        <div class="mt-2">
-                            <input type="email" name="company_email" id="company_email" placeholder="Enter email address"
-                                autocomplete="email"
-                                class="block w-full rounded-md px-3 py-2 text-base outline outline-1 outline-gray-300 placeholder-gray-400 focus:outline-2 focus:outline-indigo-600">
-                        </div>
-                    </div>
-    
-                    <!-- Phone -->
-                    <div class="sm:col-span-3">
-                        <label for="company_mobile" class="block text-sm font-medium text-gray-900">Phone Number</label>
-                        <div class="mt-2">
-                            <input type="text" name="company_mobile" id="company_mobile" placeholder="Enter phone number"
-                                class="block w-full rounded-md px-3 py-2 text-base outline outline-1 outline-gray-300 placeholder-gray-400 focus:outline-2 focus:outline-indigo-600">
-                        </div>
-                    </div>
-    
-                    <!-- Address -->
-                    <div class="col-span-6">
-                        <label for="company_address" class="block text-sm font-medium text-gray-900">Street Address</label>
-                        <div class="mt-2">
-                            <input type="text" name="company_address" id="company_address"
-                                placeholder="Enter street address" autocomplete="street-address"
-                                class="block w-full rounded-md px-3 py-2 text-base outline outline-1 outline-gray-300 placeholder-gray-400 focus:outline-2 focus:outline-indigo-600">
-                        </div>
-                    </div>
-    
-                    <!-- City -->
-                    <div class="sm:col-span-2">
-                        <label for="city" class="block text-sm font-medium text-gray-900">City</label>
-                        <div class="mt-2">
-                            <input type="text" name="city" id="city" placeholder="Enter city" autocomplete="address-level2"
-                                class="block w-full rounded-md px-3 py-2 text-base outline outline-1 outline-gray-300 placeholder-gray-400 focus:outline-2 focus:outline-indigo-600">
-                        </div>
-                    </div>
-    
-                    <!-- State -->
-                    <div class="sm:col-span-2">
-                        <label for="state" class="block text-sm font-medium text-gray-900">State/Province</label>
-                        <div class="mt-2">
-                            <input type="text" name="state" id="state" placeholder="Enter state"
-                                class="block w-full rounded-md px-3 py-2 text-base outline outline-1 outline-gray-300 placeholder-gray-400 focus:outline-2 focus:outline-indigo-600">
-                        </div>
-                    </div>
-    
-                    <!-- Postal Code -->
-                    <div class="sm:col-span-2">
-                        <label for="postal_code" class="block text-sm font-medium text-gray-900">ZIP/Postal Code</label>
-                        <div class="mt-2">
-                            <input type="text" name="postal_code" id="postal_code" placeholder="Enter ZIP code"
-                                autocomplete="postal-code"
-                                class="block w-full rounded-md px-3 py-2 text-base outline outline-1 outline-gray-300 placeholder-gray-400 focus:outline-2 focus:outline-indigo-600">
-                        </div>
-                    </div>
-                </div>
-            </div>
+       
     
             <!-- Receiver Details Section -->
             <h1 class="flex items-center justify-center mt-10 text-3xl font-semibold text-gray-900 uppercase">
                 Enter Receiver Details
             </h1>
-            <div class="px-8 py-8">
-                <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <!-- Receiver Name -->
-                    <div class="sm:col-span-3">
-                        <label for="receiver_name" class="block text-sm font-medium text-gray-900">Receiver Name</label>
-                        <div class="mt-2">
-                            <input type="text" name="receiver_name" id="receiver_name" placeholder="Enter receiver name"
-                                class="block w-full rounded-md px-3 py-2 text-base outline outline-1 outline-gray-300 placeholder-gray-400 focus:outline-2 focus:outline-indigo-600">
-                        </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Receiver Details</h3>
+                <form action="#" method="post">
+
+                    {%csrf_token%}
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-1">Name</label>
+                        <input type="text" name="receiver_name" placeholder="Enter Name"
+                            class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-400">
                     </div>
-    
-                    <!-- Receiver Email -->
-                    <div class="sm:col-span-3">
-                        <label for="receiver_email" class="block text-sm font-medium text-gray-900">Email Address</label>
-                        <div class="mt-2">
-                            <input type="email" name="receiver_email" id="receiver_email"
-                                placeholder="Enter receiver email"
-                                class="block w-full rounded-md px-3 py-2 text-base outline outline-1 outline-gray-300 placeholder-gray-400 focus:outline-2 focus:outline-indigo-600">
-                        </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-1">Address</label>
+                        <textarea name="receiver_address" rows="3" placeholder="Enter Address"
+                            class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-400"></textarea>
                     </div>
-    
-                    <!-- Receiver Phone -->
-                    <div class="sm:col-span-3">
-                        <label for="receiver_mobile" class="block text-sm font-medium text-gray-900">Phone Number</label>
-                        <div class="mt-2">
-                            <input type="text" name="receiver_mobile" id="receiver_mobile"
-                                placeholder="Enter receiver phone number"
-                                class="block w-full rounded-md px-3 py-2 text-base outline outline-1 outline-gray-300 placeholder-gray-400 focus:outline-2 focus:outline-indigo-600">
-                        </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-1">Phone</label>
+                        <input type="number" name="receiver_mobile" placeholder="Enter Phone"
+                            class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-400">
                     </div>
-    
-                    <!-- Receiver Address -->
-                    <div class="col-span-6">
-                        <label for="receiver_address" class="block text-sm font-medium text-gray-900">Street Address</label>
-                        <div class="mt-2">
-                            <input type="text" name="receiver_address" id="receiver_address"
-                                placeholder="Enter receiver street address"
-                                class="block w-full rounded-md px-3 py-2 text-base outline outline-1 outline-gray-300 placeholder-gray-400 focus:outline-2 focus:outline-indigo-600">
-                        </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-1">Email</label>
+                        <input type="email" name="receiver_email" placeholder="Enter Email"
+                            class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-400">
                     </div>
-                </div>
-            </div>
-    
-            <!-- Save Button -->
-            <div class="flex justify-center mt-6">
+                    <!-- <div class="text-right">
+                        <button type="submit"
+                            class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600">Submit</button>
+                    </div> -->
+
+                      <!-- Save Button -->
+            <div class="">
                 <button type="submit"
                     class="rounded-md bg-indigo-600 px-6 py-2 text-sm font-semibold text-white shadow-md hover:bg-indigo-500 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
                     Save
                 </button>
+
+            </div>
+          
             </div>
         </div>
     </form>
     
 </div>
+
+{%endblock%}

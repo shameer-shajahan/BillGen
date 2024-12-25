@@ -261,3 +261,21 @@ class Bill(models.Model):
         verbose_name = "Bill"
         verbose_name_plural = "Bills"
         ordering = ['-invoice_date']
+
+class ExBill(models.Model):
+
+    exbill_obj=models.OneToOneField(Company,on_delete=models.CASCADE,related_name="ex_bill")
+
+class ExistingBills(models.Model):
+
+    items_obj = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='Bill_item')  # Linking to Company
+
+    receiver_obj = models.ForeignKey(Receiver, on_delete=models.CASCADE, related_name='Bill_receivers')  # Linking to Company
+
+    ship_obj = models.ForeignKey(ShipTo, on_delete=models.CASCADE, related_name='Bill_shipments')  # Linking to Company
+
+    bill_obj = models.ForeignKey(Bill, on_delete=models.CASCADE,null=True,blank=True, related_name='Bill_bills') 
+
+    existing_bill_obj = models.ForeignKey(ExBill, on_delete=models.CASCADE, related_name='ex_bill_items') 
+
+

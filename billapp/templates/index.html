@@ -42,15 +42,20 @@
           <h3 class="text-xl font-semibold mb-3">Easy Bill Creation</h3>
           <p>Create professional bills in seconds with pre-filled templates or custom fields.</p>
           <div class="mt-6">
-            <a href="{%url 'generate-bill'%}" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg text-lg">Generate Bill</a>
+            <a href="{%url 'receiver'%}" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg text-lg">Generate New Bill</a>
           </div>
         </div>
 
 
         <div class="bg-gray-100 p-6 rounded-lg shadow-lg">
-          <h3 class="text-xl font-semibold mb-3">Downloadable Formats</h3>
-          <p>Download your generated bills in PDF or Excel formats for easy sharing and printing.</p>
+          <h3 class="text-xl font-semibold mb-3">Existing Bill</h3>
+          <p>Welcome back! Manage your invoices effortlessly.</p>
+          <div class="mt-6">
+            <a href="{%url 'generate-bill' pk=company_id %}" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg text-lg">Existing Bill</a>
+          </div>
         </div>
+
+
         <div class="bg-gray-100 p-6 rounded-lg shadow-lg">
           <h3 class="text-xl font-semibold mb-3">Secure & Fast</h3>
           <p>All your data is securely processed and stored with fast generation times.</p>
@@ -100,6 +105,9 @@
       <p>&copy; 2024 BillGen. All rights reserved.</p>
     </div>
   </footer>
+
+
+  {{data}}
 
 </body>
 

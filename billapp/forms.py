@@ -114,3 +114,19 @@ class ShipToForm(forms.ModelForm):
             
                  }
 
+class BillForm(forms.ModelForm):
+    class Meta:
+        model = Bill
+        fields = [
+            'bill_obj', 'invoice_no', 'invoice_date', 'due_date',
+            'total_amount', 'tax_amount', 'discount_amount',
+            'paid_amount', 'remarks'
+        ]
+        widgets = {
+            'invoice_date': forms.DateInput(attrs={'type': 'date'}),
+            'due_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+
+
+

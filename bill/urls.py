@@ -19,15 +19,42 @@ from django.urls import path
 from django.conf import settings
 from billapp import views
 from django.conf.urls.static import static
+from billapp.views import ManageItemsView, generate_items_pdf,send_items_email
+
 
 urlpatterns = [
+   
     path('admin/', admin.site.urls),
+   
     path('signup/',views.SignUpView.as_view(),name="signup"),
+   
     path("",views.SignInView.as_view(),name="signin"),
+   
     path("index/",views.index.as_view(),name="index"),
+   
+    path("invoice/<int:pk>/",views.Invoice.as_view(),name="invoice"),
+   
     path("company/detail/",views.CompanyDetailView.as_view(),name="company-detail"),
-    path("generate/bill/",views.GenerateBillReceiptView.as_view(),name="generate-bill"),
+
+    path("receiver/",views.ReceiverView.as_view(),name="receiver"),
+
+    path("shipto/",views.Shipto.as_view(),name="shipto"),
+   
+    path("generate/bill/<int:pk>/",views.GenerateBillReceiptView.as_view(),name="generate-bill"),
+   
     path("signout/",views.SignOutView.as_view(),name="signout"),
-    path('item/<int:pk>/remove',views.ItemDeleteView.as_view(),name="delete"),
+   
+    path('delete-item/<int:pk>/<int:bill_id>/', views.ItemDeleteView.as_view(), name='delete-item'),   
+    
+    path('manage-items/pdf/', generate_items_pdf, name='generate_items_pdf'),
+   
+    path('manage-items/', ManageItemsView.as_view(), name='manage_items'),
+   
+    path('bill/list/', views.BillListView.as_view(), name='bill_list'),
+   
+    path('bills/new/', views.BillCreateView.as_view(), name='bill_create'),
+   
+    path('manage-items/email/', send_items_email, name='send_items_email'),
+
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
