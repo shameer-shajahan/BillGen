@@ -74,10 +74,8 @@ class Item(models.Model):
     discount = models.DecimalField(max_digits=5, decimal_places=2, default=0.0, help_text="Discount in %")  # Discount Percentage
    
     tax_option = [
-        ('GST', 'GST'),
-        ('CGST', 'CGST'),
-        ('SGST', 'SGST'),
-        ('None', 'No Tax'),
+        ('18', 'GST'),
+        ('0', 'No Tax'),
     ]
    
     tax = models.CharField(max_length=50, choices=tax_option, default='None')  # Tax Type
@@ -102,7 +100,7 @@ class Item(models.Model):
         base_amount = self.quantity * float(self.rate)
         discount_amount = base_amount * (float(self.discount) / 100)
         taxable_amount = base_amount - discount_amount
-        tax_amount = taxable_amount * (float(self.tax_rate) / 100)
+        tax_amount = taxable_amount * (float(self.tax) / 100)
         total_amount = taxable_amount + tax_amount
         return round(total_amount, 2)
 

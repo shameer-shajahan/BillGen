@@ -3,221 +3,173 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Delivery Receipt</title>
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Receipt</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 14px;
             margin: 0;
             padding: 0;
-        }
-
-        .header,
-        .footer {
-            text-align: center;
-            padding: 10px 0;
-            background-color: #f2f2f2;
-        }
-
-        .content {
-            margin: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-
-        th,
-        td {
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        .company-details,
-        .delivery-details {
-            margin-top: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-        }
-
-        .company-details h2,
-        .delivery-details h2 {
-            margin: 0;
-        }
-
-        .footer p {
-            font-size: 12px;
-            margin: 0;
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin: 20px;
-        }
-
-        .col-4 {
-            flex: 1;
-            max-width: 30%;
-        }
-
-        .card {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .parent {
-            flex: 2;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-gap: 20px;
-            padding: 10px;
-        }
-
-        .child {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
             background-color: #f9f9f9;
         }
 
-        .child p {
-            margin: 5px 0;
+        .receipt-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .tw{
-            border: 1px solid white;
+
+        .items {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .items th,
+        .items td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .items th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .right-text {
+            text-align: right; /* Align text to the right */
+        }
+        .center-text {
+            text-align: center; /* Align text to the right */
         }
     </style>
 
-</head>
+<body class="receipt-container">
 
-<body>
-    <!-- Header -->
-    <div class="header">
-        <h1>Delivery Receipt</h1>
-    </div>
-
-
-  
-<div class="content">
-    <table class="tw">
-        <tr class="tw">
-                    <!-- Logo Section -->
-            <td class="tw">
-                logo
-            </td> 
-                    <!-- Company Details -->
-            <td class="tw">
-                <p><strong>Company Name:</strong> </p>
-                <p><strong>Address:</strong> </p>
-                <p><strong>Email:</strong> </p>
-                <p><strong>Phone:</strong> </p>
-            </td>
-                 <!-- Receipt Details -->
-            <td class="tw">
-                <p><strong>Receipt Number:</strong> </p>
-                <p><strong>Date:</strong> </p>
-            </td>
-        </tr>
-
-         <!-- Items Table -->
-         <table class="table">
+    <table class="items">
+        <table class="items ">
             <thead>
                 <tr>
-                    <th>S.No</th>
-                    <th>Items</th>
-                    <th>Qty</th>
-                    <th>Rate</th>
-                    <th>Tax</th>
-                    <th>Amount</th>
+                    <td>
+                        {% if company_dlt.company_logo %}
+                        <img src="{{ company_dlt.company_logo.url }}" id="mainImage" class="w-4/4 h-4/4"
+                            style="height: 70px;">
+                        {% else %}
+                        <h1>logo</h1>
+                        {% endif %}
+
+                        <span class="bold">{{ company_dlt.company_name }}</span><br>
+                        <span>{{ company_dlt.company_address }}, {{ company_dlt.city }}</span><br>
+                        <span>{{ company_dlt.state }}, {{ company_dlt.postal_code }}</span><br>
+                        <span>{{ company_dlt.company_mobile }}</span><br>
+                        <span>{{ company_dlt.company_email }}</span><br>
+                    </td>
+                    <td>
+                        <span class="bold">Invoice</span><br>
+                        <span> Invoice No.: 229</span><br>
+                        <span>Invoice Date: 28/12/2024</span><br>
+                        <span>Due Date: 07/06/2025</span><br>
+                    </td>
+                </tr>
+            </thead>
+            <thead>
+                <tr>
+                    <td>
+                        <spam class="bold">BILL TO</spam><br>
+                        <span>{{receiver_data.receiver_name}}</span><br>
+                        <span>Address:{{receiver_data.receiver_address}} </span><br>
+                        <span>Phone:{{receiver_data.receiver_mobile}}</span><br>
+                        <span>Email:{{receiver_data.receiver_email}}</span><br>
+                    </td>
+                    <td>
+                        <spam class="bold">SHIP TO</spam><br>
+                        <span>{{shipto_data.shipping_name}}</span><br>
+                        <span>Address:{{shipto_data.shipping_address}} </span><br>
+                        <span>Phone:{{shipto_data.shipping_mobile}}</span><br>
+                        <span>Email:{{shipto_data.shipping_email}}</span><br>
+                    </td>
+
+            </thead>
+        </table>
+
+        <table class="items">
+            <thead>
+                <tr>
+                    <th><div class="center-text">S.No</div></th>
+                    <th><div class="center-text">Item Name</div></th>
+                    <th><div class="center-text">Quantity</div></th>
+                    <th><div class="center-text">Rate</div></th>
+                    <th><div class="center-text">Amount</div></th>
                 </tr>
             </thead>
             <tbody>
+                {% for i in items %}
                 <tr>
-                    <td>1</td>
-                    <td>Forms Biochemistry Test Request (White)</td>
-                    <td>20,000 PCS</td>
-                    <td>0.59</td>
-                    <td>2,135.59 (18%)</td>
-                    <td>14,000</td>
+                    <td><div class="center-text">{{i.id}}</div></td>
+                    <td><div class="center-text">{{i.quantity}}</div></td>
+                    <td><div class="center-text">{{i.rate}}</div></td>
+                    <td><div class="center-text">{{i.tax}}</div></td>
+                    <td><div class="center-text">{{i.amount}}</div></td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Department of Urin Analysis Pink</td>
-                    <td>3,000 PCS</td>
-                    <td>0.34</td>
-                    <td>183.05 (18%)</td>
-                    <td>1,200</td>
+                {% endfor %}
+
                 </tr>
-                <tr>
-                    <td>3</td>
-                    <td>A5 size billing paper with multi-color printing</td>
-                    <td>200,000 PCS</td>
-                    <td>0.30</td>
-                    <td>10,677.97 (18%)</td>
-                    <td>70,000</td>
-                </tr>
+
             </tbody>
         </table>
-    </div>
 
-
-    <div class="content">
-        <table class="tw">
-            <tr class="tw"> 
-                        <!-- Company Details -->
-                <td class="tw">
-                    <span> Delevery : </span><br>
-                    <span> Address :</span><br>
-                    <span> email :</span><br>
-                    <span> Phone :</span><br>
-                    <span> Signature :</span><br>
-                </td>
-                     <!-- Receipt Details -->
-                <td class="tw">
-                    <span> Receiver :</span><br>
-                    <span> Address :</span><br>
-                    <span> email :</span><br>
-                    <span> Phone :</span><br>
-                    <span> Signature :</span><br>
+        <table>
+            <tr >
+                <td>
+                   <div class="right-text bold"> Total : 88888888</div>
 
                 </td>
             </tr>
-    
+            <tr>
+                <td>
+                    <div class="center-text"> Thank you and looking forward to your valuable orders.........</div>
+                    
+                </td>
+            </tr>
+
         </table>
-    </div>
+
+        <table>
+            <tr>
+                <td>
+                    <p class="bold">
+                        Authorised Signatory For:
+                    </p>
+                    <p class="bold">
+                        signature:
+                    </p>
 
 
- 
-    </div>
+                </td>
+
+                <td>
+                    <p class="bold">
+                        Received by:
+                    </p>
+                    <p class="bold">
+                        signature:
+                    </p>
+                </td>
+            </tr>
+
+        </table>
+    </table>
+
 </body>
+</head>
 
 </html>

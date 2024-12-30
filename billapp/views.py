@@ -90,14 +90,22 @@ class SignInView(View):
 
         return render(request,self.template_name,{"form":form_instance})
 
-class SignOutView(View):
+class SignOutView(View): 
 
     def get(self,request,*args,**kwargs):
 
         logout(request)
 
-        return redirect("signin")
-    
+        return redirect("landingpage")
+
+class LandingpageView(View):
+
+    template_name="landingpage.html"
+
+    def get(self,request,*args,**kwargs):
+
+        return render(request,self.template_name)
+
 class CompanyDetailView(View):
 
     template_name="company_detail.html"
@@ -129,211 +137,6 @@ class CompanyDetailView(View):
         print("company detail creation failed")
         
         return render(request,self.template_name,{"form":form_instance})
-    
-class index(View):
-
-    template_name="index.html"
-
-    def get(self,request,*args,**kwargs):
-
-        company = request.user.company
-        context = {
-        'company_id': company.id,
-        }
-        return render(request, self.template_name, context)
-    
-class Invoice(View):
-
-    template_name = "invoice.html"
-
-    def get(self, request, *args, **kwargs):
-
-        id = kwargs.get('pk')
-
-        # Get items, receiver, and shipto data associated with the user's company
-
-        comp_dtl=Company.objects.get(company_obj=(request.user))
-
-        items = Item.objects.filter(items_obj=request.user.company)
-
-        receiver = Receiver.objects.filter(receiver_obj=request.user.company).get(id=id)
-
-        shipto = ShipTo.objects.filter(ship_obj=request.user.company).get(id=id)
-
-        return render(request,self.template_name,{"data": items,"receiver_data": receiver,"shipto_data": shipto,"comp_dtl":comp_dtl})
-
-class GenerateBillReceiptView(View):
-
-    template_name = 'generate_bill.html'
-
-    item_form_class = ItemForm
-
-    def get(self, request, *args, **kwargs):
-
-        id = kwargs.get('pk')
-
-        item_form_instance = self.item_form_class()
-        
-        qs = Item.objects.filter(items_obj=request.user.company)
-        
-        comp_dtl=Company.objects.get(company_obj=(request.user))
-        
-        receiver = Receiver.objects.filter(receiver_obj=request.user.company).get(id=id)
-
-        shipto = ShipTo.objects.filter(ship_obj=request.user.company).get(id=id)
-        
-        return render(request, self.template_name, {
-            "data": qs,
-            "item_form": item_form_instance,
-            "receiver_data": receiver,
-            "shipto_data": shipto,
-            "comp_dtl":comp_dtl,
-             "id": id 
-            })
-
-    def post(self, request, *args, **kwargs):
-        id = kwargs.get('pk')
-        form_data = request.POST
-        form_instance = self.item_form_class(form_data)  # Use item_form_class here
-
-        if form_instance.is_valid():
-            item_object = form_instance.save(commit=False)
-            item_object.items_obj = request.user.company  # Link item to the user's company
-            item_object.save()
-
-            return redirect('generate-bill', pk=id)  # Redirect to the generate-bill page with the correct id
-
-        qs = Item.objects.filter(items_obj=request.user.company)  # Get items for the user's company
-        company_obj = Company.objects.get(company_obj=request.user)  # Get the user's company
-
-        # Return the template with errors in the form
-        return render(
-            request,
-            self.template_name,
-            {
-                "data": qs,
-                "item_form": form_instance,
-                "company": company_obj,
-                "id": id  # Pass the id to the template context
-            },
-        )
-
-class SignOutView(View): 
-
-    def get(self,request,*args,**kwargs):
-
-        logout(request)
-
-        return redirect("")
-    
-class ItemDeleteView(View):
-
-    def get(self, request, *args, **kwargs):
-        item_id = kwargs.get("pk")
-        bill_id = kwargs.get("bill_id")  # Assuming you pass the bill_id to redirect back to the generate-bill page
-
-        Item.objects.get(id=item_id).delete()
-
-        return redirect('generate-bill', pk=bill_id)
-
-def render_to_pdf(template_src, context_dict={}):
-    """
-    Utility function to render a template into a PDF file.
-    """
-    from django.template.loader import get_template
-    template = get_template(template_src)
-    html = template.render(context_dict)
-    result = BytesIO()
-    pisa_status = pisa.CreatePDF(
-        html, dest=result
-    )
-    if pisa_status.err:
-        return None
-    return result.getvalue()  # Return raw PDF bytes
-
-def generate_items_pdf(request):
-    """
-    View to generate and return the PDF for items.
-    """
-    items = Item.objects.filter(items_obj=request.user.company)
-    context = {
-        'items': items,
-    }
-    pdf = render_to_pdf('items_pdf_template.html', context)
-    
-    if pdf:
-        # Wrap the raw PDF bytes in a BytesIO object
-
-        response = HttpResponse(pdf, content_type='application/pdf')
-        
-        response['Content-Disposition'] = 'inline; filename="items.pdf"'
-        
-        return response
-
-    
-    return HttpResponse('Failed to generate PDF.')
-
-def send_items_email(request):
-    """
-    View to generate a PDF of items and send it via email.
-    """
-    items = Item.objects.all()
-
-    context = {
-        'items': items,
-    }
-    pdf = render_to_pdf('items_pdf_template.html', context)  # Generate the PDF
-    if pdf:
-        # Email settings
-        
-        subject = 'Delivery Receipt'
-        
-        message = 'Please find attached the delivery receipt.'
-        
-        recipient_list = ['recipient@example.com']  # Replace with actual recipient email
-        
-        sender_email = 'your_email@example.com'  # Replace with your sender email
-
-        # Create the email
-        email = EmailMessage(subject, message, sender_email, recipient_list)
-
-        # Attach the PDF
-        email.attach('delivery_receipt.pdf', pdf, 'application/pdf')
-
-        # Send the email
-        email.send()
-        return HttpResponse('Email sent successfully!')
-    return HttpResponse('Failed to generate PDF for email.')
-
-class ManageItemsView(View):
-    template_name = 'manage_items.html'
-
-    def get(self, request, *args, **kwargs):
-        """
-        Handles the GET request. Displays the list of items and the form to add a new item.
-        """
-        form = ItemForm()
-        items = Item.objects.filter(items_obj=request.user.company)
-        context = {
-            'form': form,
-            'items': items,
-        }
-        return render(request, self.template_name, context)
-
-    def post(self, request, *args, **kwargs):
-        """
-        Handles the POST request. Adds a new item to the database if the form is valid.
-        """
-        form = ItemForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('manage_items')  # Redirect to the same page after adding the item
-        items = Item.objects.filter(items_obj=request.user.company)
-        context = {
-            'form': form,
-            'items': items,
-        }
-        return render(request, self.template_name, context)
 
 class ReceiverView(View):
 
@@ -395,23 +198,244 @@ class Shipto(View):
         
         return render(request,self.template_name,{"form":form_instance})
 
+class index(View):
+
+    template_name="index.html"
+
+    def get(self,request,*args,**kwargs):
+
+        company = request.user.company
+        context = {
+        'company_id': company.id,
+        }
+        return render(request, self.template_name, context)
+    
+class Invoice(View):
+    template_name = "invoice.html"
+
+    def get(self, request, *args, **kwargs):
+        id = kwargs.get('pk')  # Retrieve the id from the URL parameters
+        comp_dtl = Company.objects.get(company_obj=request.user)
+        items = Item.objects.filter(items_obj=request.user.company)
+        receiver = Receiver.objects.filter(receiver_obj=request.user.company).get(id=id)
+        shipto = ShipTo.objects.filter(ship_obj=request.user.company).get(id=id)
+
+        # Calculate the sum of the total amounts
+        total_amount = sum(item.amount for item in items)
+
+        return render(request, self.template_name, {
+            "data": items,
+            "receiver_data": receiver,
+            "shipto_data": shipto,
+            "comp_dtl": comp_dtl,
+            "total_amount": total_amount  # Pass the total amount to the template context
+        })
+    
+class GenerateBillReceiptView(View):
+
+    template_name = 'generate_bill.html'
+
+    item_form_class = ItemForm
+
+    def get(self, request, *args, **kwargs):
+
+        id = kwargs.get('pk')
+
+        item_form_instance = self.item_form_class()
+        
+        qs = Item.objects.filter(items_obj=request.user.company)
+        
+        comp_dtl=Company.objects.get(company_obj=(request.user))
+        
+        receiver = Receiver.objects.filter(receiver_obj=request.user.company).get(id=id)
+
+        shipto = ShipTo.objects.filter(ship_obj=request.user.company).get(id=id)
+        
+        return render(request, self.template_name, {
+            "data": qs,
+            "item_form": item_form_instance,
+            "receiver_data": receiver,
+            "shipto_data": shipto,
+            "comp_dtl":comp_dtl,
+             "id": id ,
+            })
+
+    def post(self, request, *args, **kwargs):
+        id = kwargs.get('pk')
+        form_data = request.POST
+        form_instance = self.item_form_class(form_data)  # Use item_form_class here
+
+        if form_instance.is_valid():
+            item_object = form_instance.save(commit=False)
+            item_object.items_obj = request.user.company  # Link item to the user's company
+            item_object.save()
+
+            return redirect('generate-bill', pk=id)  # Redirect to the generate-bill page with the correct id
+
+        qs = Item.objects.filter(items_obj=request.user.company)  # Get items for the user's company
+        company_obj = Company.objects.get(company_obj=request.user)  # Get the user's company
+
+        # Return the template with errors in the form
+        return render(
+            request,
+            self.template_name,
+            {
+                "data": qs,
+                "item_form": form_instance,
+                "company": company_obj,
+                "id": id  # Pass the id to the template context
+            },
+        )
+    
+class ItemDeleteView(View):
+
+    def get(self, request, *args, **kwargs):
+        item_id = kwargs.get("pk")
+        bill_id = kwargs.get("bill_id")  # Assuming you pass the bill_id to redirect back to the generate-bill page
+
+        Item.objects.get(id=item_id).delete()
+
+        return redirect('generate-bill', pk=bill_id)
+
+def render_to_pdf(template_src, context_dict={}):
+    """
+    Utility function to render a template into a PDF file.
+    """
+    from django.template.loader import get_template
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    result = BytesIO()
+    pisa_status = pisa.CreatePDF(
+        html, dest=result
+    )
+    if pisa_status.err:
+        return None
+    return result.getvalue()  # Return raw PDF bytes
+
+def generate_items_pdf(request, *args, **kwargs):
+    """
+    View to generate and return the PDF for items.
+    """
+    id = kwargs.get('pk')
+    
+    items = Item.objects.filter(items_obj=request.user.company)
+    comp_dtl = Company.objects.get(company_obj=request.user)
+    receiver = Receiver.objects.filter(receiver_obj=request.user.company).get(id=id)
+
+    shipto = ShipTo.objects.filter(ship_obj=request.user.company).get(id=id)
+
+
+    pdf = render_to_pdf('items_pdf_template.html', {"items": items,"receiver_data": receiver,"shipto_data": shipto,"company_dlt":comp_dtl})
+
+    
+    if pdf:
+        # Wrap the raw PDF bytes in a BytesIO object
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="items.pdf"'
+        return response
+
+    return HttpResponse('Failed to generate PDF.')
+    
+def send_items_email(request, *args, **kwargs):
+    """
+    View to generate a PDF of items and send it via email.
+    """
+    id = kwargs.get('pk')
+    
+    items = Item.objects.filter(items_obj=request.user.company)
+    comp_dtl = Company.objects.get(company_obj=request.user)
+    receiver_dlt = Receiver.objects.filter(receiver_obj=request.user.company).get(id=id)
+    shipto_dlt = ShipTo.objects.filter(ship_obj=request.user.company).get(id=id)
+
+    context = {
+        'items': items,
+        'company_dlt': comp_dtl,
+        'receiver_dlt': receiver_dlt,
+        'shipto_dlt': shipto_dlt
+    }
+    pdf = render_to_pdf('items_pdf_template.html', context)  # Generate the PDF
+    if pdf:
+        # Email settings
+        subject = 'Delivery Receipt'
+        message = 'Please find attached the delivery receipt.'
+        recipient_list = ['recipient@example.com']  # Replace with actual recipient email
+        sender_email = 'your_email@example.com'  # Replace with your sender email
+
+        # Create the email
+        email = EmailMessage(subject, message, sender_email, recipient_list)
+
+        # Attach the PDF
+        email.attach('delivery_receipt.pdf', pdf, 'application/pdf')
+
+        # Send the email
+        email.send()
+        return HttpResponse('Email sent successfully!')
+    
+    return HttpResponse('Failed to generate PDF for email.')
+
+class ManageItemsView(View):
+    template_name = 'manage_items.html'
+
+    def get(self, request, *args, **kwargs):
+        """
+        Handles the GET request. Displays the list of items and the form to add a new item.
+        """
+        form = ItemForm()
+        
+        id = kwargs.get('pk')
+
+        item_form_instance = self.item_form_class()
+        
+        qs = Item.objects.filter(items_obj=request.user.company)
+        
+        comp_dtl=Company.objects.get(company_obj=(request.user))
+        
+        receiver = Receiver.objects.filter(receiver_obj=request.user.company).get(id=id)
+
+        shipto = ShipTo.objects.filter(ship_obj=request.user.company).get(id=id)
+        
+        return render(request, self.template_name, {
+            "data": qs,
+            "item_form": item_form_instance,
+            "receiver_data": receiver,
+            "shipto_data": shipto,
+            "comp_dtl":comp_dtl,
+             "id": id ,
+            })
+    
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles the POST request. Adds a new item to the database if the form is valid.
+        """
+        form = ItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_items')  # Redirect to the same page after adding the item
+        
+        id = kwargs.get('pk')
+
+        item_form_instance = self.item_form_class()
+        
+        qs = Item.objects.filter(items_obj=request.user.company)
+        
+        comp_dtl=Company.objects.get(company_obj=(request.user))
+        
+        receiver = Receiver.objects.filter(receiver_obj=request.user.company).get(id=id)
+
+        shipto = ShipTo.objects.filter(ship_obj=request.user.company).get(id=id)
+        
+        return render(request, self.template_name, {
+            "data": qs,
+            "item_form": item_form_instance,
+            "receiver_data": receiver,
+            "shipto_data": shipto,
+            "comp_dtl":comp_dtl,
+             "id": id ,
+            })
 
 
 # if user enter shipt data then go to generate-bill with user last enter data
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class BillListView(View):
     """

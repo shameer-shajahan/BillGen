@@ -28,33 +28,36 @@ urlpatterns = [
    
     path('signup/',views.SignUpView.as_view(),name="signup"),
    
-    path("",views.SignInView.as_view(),name="signin"),
+    path("signin/",views.SignInView.as_view(),name="signin"),
    
+    path("signout/",views.SignOutView.as_view(),name="signout"),
+    
+    path("",views.LandingpageView.as_view(),name="landingpage"),
+
     path("index/",views.index.as_view(),name="index"),
-   
-    path("invoice/<int:pk>/",views.Invoice.as_view(),name="invoice"),
    
     path("company/detail/",views.CompanyDetailView.as_view(),name="company-detail"),
 
     path("receiver/",views.ReceiverView.as_view(),name="receiver"),
-
+   
     path("shipto/",views.Shipto.as_view(),name="shipto"),
    
     path("generate/bill/<int:pk>/",views.GenerateBillReceiptView.as_view(),name="generate-bill"),
-   
-    path("signout/",views.SignOutView.as_view(),name="signout"),
+    
+    path("invoice/<int:pk>/",views.Invoice.as_view(),name="invoice"),
    
     path('delete-item/<int:pk>/<int:bill_id>/', views.ItemDeleteView.as_view(), name='delete-item'),   
-    
-    path('manage-items/pdf/', generate_items_pdf, name='generate_items_pdf'),
    
+    path('manage-items/pdf/<int:pk>/', generate_items_pdf, name='generate_items_pdf'),
+   
+    path('manage-items/email/<int:pk>/', send_items_email, name='send_items_email'),
+    
     path('manage-items/', ManageItemsView.as_view(), name='manage_items'),
    
     path('bill/list/', views.BillListView.as_view(), name='bill_list'),
    
     path('bills/new/', views.BillCreateView.as_view(), name='bill_create'),
    
-    path('manage-items/email/', send_items_email, name='send_items_email'),
 
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

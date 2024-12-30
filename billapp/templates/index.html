@@ -1,27 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+{%extends 'base.html'%}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bill Generator</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
+{%block main_block%}
 
-<body class="bg-gray-50 text-gray-900 font-sans">
-
-  <!-- Navbar -->
-  <header class="bg-blue-600 text-white shadow-md">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-      <a href="#" class="text-xl font-bold">BillGen</a>
-      <nav>
-        <a href="#features" class="px-4 hover:text-blue-300">Features</a>
-        <a href="#about" class="px-4 hover:text-blue-300">About</a>
-        <a href="#contact" class="px-4 hover:text-blue-300">Contact</a>
-        <a href="#get-started" class="px-4 py-2 bg-blue-500 rounded hover:bg-blue-400">Get Started</a>
-      </nav>
-    </div>
-  </header>
 
   <!-- Hero Section -->
   <section class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-20 px-4 text-center">
@@ -99,16 +79,5 @@
     <p class="text-lg mb-6">Start generating your bills today and streamline your business operations.</p>
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-6">
-    <div class="max-w-7xl mx-auto px-4 text-center">
-      <p>&copy; 2024 BillGen. All rights reserved.</p>
-    </div>
-  </footer>
-
-
-  {{data}}
-
-</body>
-
-</html>
+  
+{%endblock%}
