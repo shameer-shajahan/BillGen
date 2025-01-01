@@ -46,12 +46,17 @@
         }
 
         .right-text {
-            text-align: right; /* Align text to the right */
+            text-align: right;
+            /* Align text to the right */
         }
+
         .center-text {
-            text-align: center; /* Align text to the right */
+            text-align: center;
+            /* Align text to the right */
         }
     </style>
+
+    
 
 <body class="receipt-container">
 
@@ -61,8 +66,7 @@
                 <tr>
                     <td>
                         {% if company_dlt.company_logo %}
-                        <img src="{{ company_dlt.company_logo.url }}" id="mainImage" class="w-4/4 h-4/4"
-                            style="height: 70px;">
+                        <img src="{{ company_dlt.company_logo.url }}" id="mainImage" class="w-4/4 h-4/4" style="height: 70px;">
                         {% else %}
                         <h1>logo</h1>
                         {% endif %}
@@ -104,21 +108,41 @@
         <table class="items">
             <thead>
                 <tr>
-                    <th><div class="center-text">S.No</div></th>
-                    <th><div class="center-text">Item Name</div></th>
-                    <th><div class="center-text">Quantity</div></th>
-                    <th><div class="center-text">Rate</div></th>
-                    <th><div class="center-text">Amount</div></th>
+                    <th>
+                        <div class="center-text">S.No</div>
+                    </th>
+                    <th>
+                        <div class="center-text">Item Name</div>
+                    </th>
+                    <th>
+                        <div class="center-text">Quantity</div>
+                    </th>
+                    <th>
+                        <div class="center-text">Rate</div>
+                    </th>
+                    <th>
+                        <div class="center-text">Amount</div>
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 {% for i in items %}
                 <tr>
-                    <td><div class="center-text">{{i.id}}</div></td>
-                    <td><div class="center-text">{{i.quantity}}</div></td>
-                    <td><div class="center-text">{{i.rate}}</div></td>
-                    <td><div class="center-text">{{i.tax}}</div></td>
-                    <td><div class="center-text">{{i.amount}}</div></td>
+                    <td>
+                        <div class="center-text">{{i.id}}</div>
+                    </td>
+                    <td>
+                        <div class="center-text">{{i.quantity}}</div>
+                    </td>
+                    <td>
+                        <div class="center-text">{{i.rate}}</div>
+                    </td>
+                    <td>
+                        <div class="center-text">{{i.tax}}</div>
+                    </td>
+                    <td>
+                        <div class="center-text">{{i.amount}}</div>
+                    </td>
                 </tr>
                 {% endfor %}
 
@@ -128,16 +152,16 @@
         </table>
 
         <table>
-            <tr >
+            <tr>
                 <td>
-                   <div class="right-text bold"> Total : 88888888</div>
+                    <div class="right-text bold"> Total : 88888888</div>
 
                 </td>
             </tr>
             <tr>
                 <td>
                     <div class="center-text"> Thank you and looking forward to your valuable orders.........</div>
-                    
+
                 </td>
             </tr>
 

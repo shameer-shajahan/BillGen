@@ -262,7 +262,7 @@ class Bill(models.Model):
 
 class ExBill(models.Model):
 
-    exbill_obj=models.OneToOneField(Company,on_delete=models.CASCADE,related_name="ex_bill")
+    exbill_obj=models.OneToOneField(User,on_delete=models.CASCADE,related_name="ex_bill")
 
 class ExistingBills(models.Model):
 
@@ -275,5 +275,17 @@ class ExistingBills(models.Model):
     bill_obj = models.ForeignKey(Bill, on_delete=models.CASCADE,null=True,blank=True, related_name='Bill_bills') 
 
     existing_bill_obj = models.ForeignKey(ExBill, on_delete=models.CASCADE, related_name='ex_bill_items') 
+
+
+
+
+def create_bill(sender,instance,created,**kwargs):
+
+    if created:
+
+        ExBill.objects.create(exbill_obj=instance)
+
+post_save.connect(create_bill,User)
+
 
 

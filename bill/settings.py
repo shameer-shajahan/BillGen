@@ -133,3 +133,4 @@ EMAIL_USE_TLS = False  # Set to False if using SSL
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'shameershajahan80@gmail.com'  # Replace with your email
 EMAIL_HOST_PASSWORD = 'ezeo hort cjzt lazg'
+
