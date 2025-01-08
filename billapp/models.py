@@ -89,9 +89,11 @@ class Item(models.Model):
     created_at = models.DateTimeField(default=now, editable=False)  # Timestamp for creation
    
     updated_at = models.DateTimeField(auto_now=True)  # Timestamp for last update
-
+  
+  
     def __str__(self):
-        return f"{self.items} - {self.items_obj.name}"
+
+        return self.items
 
     def calculate_amount(self):
         """
@@ -262,19 +264,22 @@ class Bill(models.Model):
 
 class ExBill(models.Model):
 
-    exbill_obj=models.OneToOneField(User,on_delete=models.CASCADE,related_name="ex_bill")
+    owner=models.OneToOneField(User,on_delete=models.CASCADE,related_name="ex_bill")
 
 class ExistingBills(models.Model):
 
-    items_obj = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='Bill_item')  # Linking to Company
+    exbill_obj=models.ForeignKey(ExBill,on_delete=models.CASCADE,related_name="ex_bill_items")
+    
+    items_obj = models.ManyToManyField(Item)  # Use ManyToManyField if a bill can have multiple items
+    
+    receiver_obj = models.ForeignKey(Receiver, on_delete=models.CASCADE)
+    
+    comp_dtl = models.ForeignKey(Company, on_delete=models.CASCADE)
+    
+    ship_obj = models.ForeignKey(ShipTo, on_delete=models.CASCADE)
+    
+    # total_amount = models.DecimalField(max_digits=10, decimal_places=2)   
 
-    receiver_obj = models.ForeignKey(Receiver, on_delete=models.CASCADE, related_name='Bill_receivers')  # Linking to Company
-
-    ship_obj = models.ForeignKey(ShipTo, on_delete=models.CASCADE, related_name='Bill_shipments')  # Linking to Company
-
-    bill_obj = models.ForeignKey(Bill, on_delete=models.CASCADE,null=True,blank=True, related_name='Bill_bills') 
-
-    existing_bill_obj = models.ForeignKey(ExBill, on_delete=models.CASCADE, related_name='ex_bill_items') 
 
 
 
@@ -283,7 +288,7 @@ def create_bill(sender,instance,created,**kwargs):
 
     if created:
 
-        ExBill.objects.create(exbill_obj=instance)
+        ExBill.objects.create(owner=instance)
 
 post_save.connect(create_bill,User)
 

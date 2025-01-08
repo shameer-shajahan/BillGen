@@ -53,10 +53,10 @@ urlpatterns = [
     path('manage-items/email/<int:pk>/', send_items_email, name='send_items_email'),
     
     path('manage-items/', ManageItemsView.as_view(), name='manage_items'),
-   
-    path('bill/list/', views.BillListView.as_view(), name='bill_list'),
-   
-    path('bills/new/', views.BillCreateView.as_view(), name='bill_create'),
+
+    path('add-to-save/<int:pk>/',views.SaveBillView.as_view(),name="add-to-save"),
+
+    path('saved/', views.SavedBillSummaryView.as_view(), name='save_bill'),
    
 
 

@@ -22,114 +22,124 @@
 </head>
 
 <body class=" bg-gray-100 py-10">
-    <div class="mt-10  page max-w-4xl mx-auto bg-white p-8 shadow-lg rounded-lg border border-gray-300">
-        <!-- Header -->
-        <div class="flex justify-between items-center border-b pb-4">
-            <div>
-                {% if comp_dtl.company_logo %}
-                <img src="{{comp_dtl.company_logo.url}}" id="mainImage" class="w-4/4 h-4/4 " style="height: 70px;">
-                {%endif%}
-                <h1 class="text-2xl font-bold">{{comp_dtl.company_name}}</h1>
-                <p class="text-sm text-gray-600">{{comp_dtl.company_address}},{{comp_dtl.city}}</p>
-                <p class="text-sm text-gray-600">{{comp_dtl.state}},{{comp_dtl.postal_code}}</p>
-                <p class="text-sm text-gray-600">{{comp_dtl.company_mobile}}</p>
-                <p class="text-sm text-gray-600">{{comp_dtl.company_email}}</p>
+    <form action="{%url 'add-to-save' pk=shipto_data.id%}" method="post">
+        {% csrf_token %}
+        <div class="mt-10  page max-w-4xl mx-auto bg-white p-8 shadow-lg rounded-lg border border-gray-300">
+            <!-- Header --> 
+            <div class="flex justify-between items-center border-b pb-4">
+                <div>
+                    {% if comp_dtl.company_logo %}
+                    <img src="{{comp_dtl.company_logo.url}}" id="mainImage" class="w-4/4 h-4/4 " style="height: 70px;">
+                    {%endif%}
+                    <h1 class="text-2xl font-bold">{{comp_dtl.company_name}}</h1>
+                    <p class="text-sm text-gray-600">{{comp_dtl.company_address}},{{comp_dtl.city}}</p>
+                    <p class="text-sm text-gray-600">{{comp_dtl.state}},{{comp_dtl.postal_code}}</p>
+                    <p class="text-sm text-gray-600">{{comp_dtl.company_mobile}}</p>
+                    <p class="text-sm text-gray-600">{{comp_dtl.company_email}}</p>
+                </div>
+                <div class="text-right">
+                    <h2 class="text-2xl font-bold">Invoice</h2>
+                    <p>Invoice No.: <strong>229</strong></p>
+                    <p>Invoice Date: <strong>28/12/2024</strong></p>
+                    <p>Due Date: <strong>07/06/2025</strong></p>
+                </div>
             </div>
-            <div class="text-right">
-                <h2 class="text-2xl font-bold">Invoice</h2>
-                <p>Invoice No.: <strong>229</strong></p>
-                <p>Invoice Date: <strong>28/12/2024</strong></p>
-                <p>Due Date: <strong>07/06/2025</strong></p>
+
+            <!-- Receiver and Ship To -->
+            <div class="grid grid-cols-2 gap-4 mt-6">
+                <div>
+                    <h3 class="text-lg font-semibold">Bill To:</h3>
+                    {% if receiver_data %}
+
+                    <p class="text-sm">{{ receiver_data.receiver_name }}</p>
+                    <p class="text-sm">{{ receiver_data.receiver_address }}</p>
+                    <p class="text-sm">{{ receiver_data.receiver_email }}</p>
+                    <p class="text-sm">{{ receiver_data.receiver_mobile }}</p>
+
+                    {% else %}
+                    <p class="text-sm text-gray-600">No receiver data available</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold">Ship To:</h3>
+                    {% if shipto_data %}
+
+                    <p class="text-sm">{{ shipto_data.shipping_name }}</p>
+                    <p class="text-sm">{{ shipto_data.shipping_address }}</p>
+                    <p class="text-sm">{{ shipto_data.shipping_email }}</p>
+                    <p class="text-sm">{{ shipto_data.shipping_mobile }}</p>
+
+                    {% else %}
+                    <p class="text-sm text-gray-600">No shipto data available</p>
+                    {% endif %}
+                </div>
             </div>
-        </div>
 
-        <!-- Receiver and Ship To -->
-        <div class="grid grid-cols-2 gap-4 mt-6">
-            <div>
-                <h3 class="text-lg font-semibold">Bill To:</h3>
-                {% if receiver_data %}
+            <!-- Items Table -->
+            <table class="w-full mt-6 border border-gray-400 text-sm">
+                <thead>
+                    <tr class="bg-gray-200 text-left">
+                        <th class="p-2 border border-gray-400">S.No</th>
+                        <th class="p-2 border border-gray-400">Item Name</th>
+                        <th class="p-2 border border-gray-400">Quantity</th>
+                        <th class="p-2 border border-gray-400">Rate</th>
+                        <th class="p-2 border border-gray-400">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if data %}
+                    {% for item in data %}
+                    <tr>
+                        <td class="p-2 border border-gray-400 text-center">{{ forloop.counter }}</td>
+                        <td class="p-2 border border-gray-400">{{ item.items|default:"0" }}</td>
+                        <td class="p-2 border border-gray-400 text-center">{{ item.quantity|default:"0" }}</td>
+                        <td class="p-2 border border-gray-400 text-right">{{ item.rate|default:"0" }}</td>
+                        <td class="p-2 border border-gray-400 text-right">{{ item.amount|default:"0" }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="p-2 border border-gray-400 text-center">No items available</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
 
-                <p class="text-sm">{{ receiver_data.receiver_name }}</p>
-                <p class="text-sm">{{ receiver_data.receiver_address }}</p>
-                <p class="text-sm">{{ receiver_data.receiver_email }}</p>
-                <p class="text-sm">{{ receiver_data.receiver_mobile }}</p>
-
-                {% else %}
-                <p class="text-sm text-gray-600">No receiver data available</p>
-                {% endif %}
+            <!-- Total -->
+            <div class="mt-6 text-right">
+                <p class="text-lg font-semibold">Total: ₹{{ total_amount|default:"0" }}</p>
             </div>
-            <div>
-                <h3 class="text-lg font-semibold">Ship To:</h3>
-                {% if shipto_data %}
 
-                <p class="text-sm">{{ shipto_data.shipping_name }}</p>
-                <p class="text-sm">{{ shipto_data.shipping_address }}</p>
-                <p class="text-sm">{{ shipto_data.shipping_email }}</p>
-                <p class="text-sm">{{ shipto_data.shipping_mobile }}</p>
-
-                {% else %}
-                <p class="text-sm text-gray-600">No shipto data available</p>
-                {% endif %}
+            <!-- Terms and Conditions -->
+            <div class="mt-10">
+                <p class="text-sm mt-2 text-center">Thank you and looking forward to your valuable orders.</p>
             </div>
-        </div>
 
-        <!-- Items Table -->
-        <table class="w-full mt-6 border border-gray-400 text-sm">
-            <thead>
-                <tr class="bg-gray-200 text-left">
-                    <th class="p-2 border border-gray-400">S.No</th>
-                    <th class="p-2 border border-gray-400">Item Name</th>
-                    <th class="p-2 border border-gray-400">Quantity</th>
-                    <th class="p-2 border border-gray-400">Rate</th>
-                    <th class="p-2 border border-gray-400">Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if data %}
-                {% for item in data %}
-                <tr>
-                    <td class="p-2 border border-gray-400 text-center">{{ forloop.counter }}</td>
-                    <td class="p-2 border border-gray-400">{{ item.items|default:"0" }}</td>
-                    <td class="p-2 border border-gray-400 text-center">{{ item.quantity|default:"0" }}</td>
-                    <td class="p-2 border border-gray-400 text-right">{{ item.rate|default:"0" }}</td>
-                    <td class="p-2 border border-gray-400 text-right">{{ item.amount|default:"0" }}</td>
-                </tr>
-                {% endfor %}
-                {% else %}
-                <tr>
-                    <td colspan="5" class="p-2 border border-gray-400 text-center">No items available</td>
-                </tr>
-                {% endif %}
-            </tbody>
-        </table>
-        
-        <!-- Total -->
-        <div class="mt-6 text-right">
-            <p class="text-lg font-semibold">Total: ₹{{ total_amount|default:"0" }}</p>
-        </div>
-        
-        <!-- Terms and Conditions -->
-        <div class="mt-10">
-            <p class="text-sm mt-2 text-center">Thank you and looking forward to your valuable orders.</p>
-        </div>
-        
-        <!-- button -->
-        <div class="row mt-4 text-center">
-            <a class="mt-10 inline-flex items-center gap-2 rounded border border-indigo-600 px-8 py-3 text-indigo-600 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring active:bg-indigo-500"
-                href="{% url 'generate-bill' pk=receiver_data.id %}">
-                <span class="text-sm font-medium"> <--- BACK </span>
-            </a>
-            <a class="col-md-4 mt-10 inline-flex items-center gap-2 rounded border border-indigo-600 px-8 py-3 text-indigo-600 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring active:bg-indigo-500"
-                href="{% url 'generate_items_pdf' pk=receiver_data.id %}">
-                <span class="text-sm font-medium"> Download PDF ---> </span>
-            </a>
-            <a class="col-md-4 mt-10 inline-flex items-center gap-2 rounded border border-indigo-600 px-8 py-3 text-indigo-600 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring active:bg-indigo-500"
-                href="{% url 'send_items_email' pk=receiver_data.id %}">
-                <span class="text-sm font-medium"> Send PDF via Email ---> </span>
-            </a>
-        </div>
+            <!-- button -->
+            <div class="row mt-4 text-center">
+                <a class="mt-10 inline-flex items-center gap-2 rounded border border-indigo-600 px-8 py-3 text-indigo-600 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring active:bg-indigo-500"
+                    href="{% url 'generate-bill' pk=receiver_data.id %}">
+                    <span class="text-sm font-medium"> <--- BACK </span>
+                </a>
+                <a class="col-md-4 mt-10 inline-flex items-center gap-2 rounded border border-indigo-600 px-8 py-3 text-indigo-600 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring active:bg-indigo-500"
+                    href="{% url 'generate_items_pdf' pk=receiver_data.id %}">
+                    <span class="text-sm font-medium"> Download PDF ---> </span>
+                </a>
+         
 
-    </div>
+                <button type="submit" class="col-md-4 mt-10 inline-flex items-center gap-2 rounded border border-indigo-600 px-8 py-3 text-indigo-600 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring active:bg-indigo-500">
+                    <span class="text-sm font-medium"> Save ---> </span>
+                </button>
+
+                
+                <a class="col-md-4 mt-10 inline-flex items-center gap-2 rounded border border-indigo-600 px-8 py-3 text-indigo-600 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring active:bg-indigo-500"
+                    href="{% url 'send_items_email' pk=receiver_data.id %}">
+                    <span class="text-sm font-medium"> Send PDF via Email ---> </span>
+                </a>
+            </div>
+
+        </div>
+    </form>
 
     <div class="mt-6"></div>
     </div>

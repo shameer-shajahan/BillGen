@@ -3,7 +3,7 @@ from django.views import View
 from django.views.generic.edit import FormView
 from .forms import ItemForm, SignUpForm, SignInForm, CompanyDetailForm, ReceiverForm, ShipToForm, BillForm
 from django.contrib.auth import authenticate,login,logout
-from .models import Item,Company,ExistingBills
+from .models import Item,Company,ExistingBills,ExBill
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas 
 from django.core.mail import EmailMessage
@@ -434,129 +434,59 @@ class ManageItemsView(View):
              "id": id ,
             })
 
-
 # if user enter shipt data then go to generate-bill with user last enter data
 
-class BillListView(View):
-    """
-    Display a list of bills associated with the user's company.
-    """
-    template_name = 'bill_list.html'
+class SaveBillView(View):
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        id = kwargs.get('pk')  # Retrieve the id from the URL parameters
 
-        items = Item.objects.filter(items_obj=request.user.company)
+        comp_dtl = Company.objects.get(company_obj=request.user)
+        items = Item.objects.filter(items_obj=request.user.company)  # Filter items by the user's company
+        receiver = Receiver.objects.filter(receiver_obj=request.user.company).get(id=id)
+        shipto = ShipTo.objects.filter(ship_obj=request.user.company).get(id=id)
+         # Calculate the sum of the total amounts
+        total_amount = sum(item.amount for item in items)
+        
+        # Correctly reference the `owner` field instead of `user`
+        exbill_obj = ExBill.objects.get(owner=request.user)
+        
+        # Create a new ExistingBills instance
+        bill = ExistingBills.objects.create(
+            receiver_obj=receiver,
+            comp_dtl=comp_dtl,
+            ship_obj=shipto,
+            exbill_obj=exbill_obj,
+            # total_amount=total_amount,
+        )
 
-        receiver = Receiver.objects.filter(receiver_obj=request.user.company)
+        # Add the items to the bill
+        bill.items_obj.set(items)
 
-        shipto = ShipTo.objects.filter(ship_obj=request.user.company)
+        print("Bill has been added to saved Bills")
 
-        return render(request,self.template_name,{"data": items,"receiver_data": receiver,"shipto_data": shipto,},)
+        return redirect("save_bill")
 
+class SavedBillSummaryView(View):
 
+    template_name="saved_items.html"
 
-class BillCreateView(View):
+    def get(self,request,*args,**kwargs):
+        
+        qs=ExistingBills.objects.filter(exbill_obj=request.user.ex_bill) 
+
+        return render(request,self.template_name,{"data":qs})
     
-    template_name = 'generate_bill.html'
+class SavedBillDetailView(View):
 
-    item_form_class = ItemForm
-
-    receiver_form_class = ReceiverForm
-
-    shipto_form_class = ShipToForm
+    template_name="saved_bill_detail.html"
 
     def get(self,request,*args,**kwargs):
 
-        item_form_instance=self.item_form_class()
+        id=kwargs.get('pk')
 
-        receiver_form_instance=self.receiver_form_class()
+        bill_obj=ExistingBills.objects.get(id=id)
 
-        shipto_form_instance=self.shipto_form_class()
+        items_obj=Item.objects.filter(items_obj=request.user.company)
 
-        qs=Item.objects.filter(items_obj=request.user.company) 
-
-        company_obj=Company.objects.get(company_obj=(request.user))
-
-        return render(request,self.template_name,{"data":qs,"item_form":item_form_instance,"company":company_obj,"receiver_form":receiver_form_instance, "shipto_form":shipto_form_instance })
-
-    def post(self, request, *args, **kwargs):
-
-        form_data = request.POST
-
-        # Handle ItemForm submission
-        if 'submit_item_form' in form_data:
-
-            item_form_instance = self.item_form_class(form_data)
-            
-            if item_form_instance.is_valid():
-            
-                item_object = item_form_instance.save(commit=False)
-            
-                item_object.items_obj = request.user.company  # Link item to the user's company
-            
-                item_object.save()
-            
-                return redirect("generate-bill")  # Redirect after successful submission
-            
-            else:
-            
-                print("Item Form Errors:", item_form_instance.errors)  # Log errors for debugging
-
-        # Handle ReceiverForm and ShipToForm submission together
-        
-        elif 'submit_receiver_shipto_forms' in form_data:
-        
-            receiver_form_instance = self.receiver_form_class(form_data)
-        
-            shipto_form_instance = self.shipto_form_class(form_data)
-    
-            if receiver_form_instance.is_valid() and shipto_form_instance.is_valid():
-
-                receiver_object = receiver_form_instance.save(commit=False)
-
-                receiver_object.receiver_obj = request.user.company  # Link receiver to the user's company
-
-                receiver_object.save()                
-
-                shipto_object = shipto_form_instance.save(commit=False)
-                
-                shipto_object.ship_obj = request.user.company  # Link shipping to the user's company
-               
-                shipto_object.save()
-               
-                return redirect("invoice")  # Redirect after successful submission
-            
-            else:
-            
-                print("Receiver Form Errors:", receiver_form_instance.errors)  # Log errors for debugging
-            
-                print("ShipTo Form Errors:", shipto_form_instance.errors)  # Log errors for debugging
-
-        # Reload the page with errors if forms are invalid
-        
-        qs = Item.objects.filter(items_obj=request.user.company)  # Get items for the user's company
-        
-        company_obj = Company.objects.get(company_obj=request.user)  # Get the user's company
-
-        return render(
-        
-            request, 
-        
-            self.template_name, 
-        
-            {
-        
-                "data": qs,
-        
-                "item_form": self.item_form_class(form_data) if 'submit_item_form' in form_data else self.item_form_class(),
-        
-                "company": company_obj,
-        
-                "receiver_form": self.receiver_form_class(form_data),
-        
-                "shipto_form": self.shipto_form_class(form_data),
-            }
-        )
-
-
-
+        return render(request,self.template_name,{"data":bill_obj,"items":items_obj})
