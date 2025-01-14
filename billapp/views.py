@@ -15,6 +15,10 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from .models import Item, Receiver, ShipTo
 from io import BytesIO
+from django.utils.decorators import method_decorator
+from billapp.decorators import signin_requried
+from django.views.decorators.cache import never_cache
+decs=[signin_requried,never_cache]
 
 
     
@@ -106,6 +110,7 @@ class LandingpageView(View):
 
         return render(request,self.template_name)
 
+@method_decorator(decs, name='dispatch')
 class CompanyDetailView(View):
 
     template_name="company_detail.html"
@@ -138,6 +143,7 @@ class CompanyDetailView(View):
         
         return render(request,self.template_name,{"form":form_instance})
 
+@method_decorator(decs, name='dispatch')
 class ReceiverView(View):
 
     template_name = 'receiver.html'
@@ -168,6 +174,7 @@ class ReceiverView(View):
         
         return render(request,self.template_name,{"form":form_instance})
 
+@method_decorator(decs, name='dispatch')
 class Shipto(View):
 
     template_name = 'shipto.html'
@@ -198,6 +205,7 @@ class Shipto(View):
         
         return render(request,self.template_name,{"form":form_instance})
 
+@method_decorator(decs, name='dispatch')
 class index(View):
 
     template_name="index.html"
@@ -210,6 +218,7 @@ class index(View):
         }
         return render(request, self.template_name, context)
     
+@method_decorator(decs, name='dispatch')
 class Invoice(View):
     template_name = "invoice.html"
 
@@ -231,6 +240,7 @@ class Invoice(View):
             "total_amount": total_amount  # Pass the total amount to the template context
         })
     
+@method_decorator(decs, name='dispatch')
 class GenerateBillReceiptView(View):
 
     template_name = 'generate_bill.html'
@@ -287,6 +297,7 @@ class GenerateBillReceiptView(View):
             },
         )
     
+@method_decorator(decs, name='dispatch')
 class ItemDeleteView(View):
 
     def get(self, request, *args, **kwargs):
@@ -373,6 +384,7 @@ def send_items_email(request, *args, **kwargs):
     
     return HttpResponse('Failed to generate PDF for email.')
 
+@method_decorator(decs, name='dispatch')
 class ManageItemsView(View):
     template_name = 'manage_items.html'
 
@@ -436,6 +448,7 @@ class ManageItemsView(View):
 
 # if user enter shipt data then go to generate-bill with user last enter data
 
+@method_decorator(decs, name='dispatch')
 class SaveBillView(View):
 
     def post(self, request, *args, **kwargs):
@@ -467,6 +480,7 @@ class SaveBillView(View):
 
         return redirect("save_bill")
 
+@method_decorator(decs, name='dispatch')
 class SavedBillSummaryView(View):
 
     template_name="saved_items.html"
@@ -477,6 +491,7 @@ class SavedBillSummaryView(View):
 
         return render(request,self.template_name,{"data":qs})
     
+@method_decorator(decs, name='dispatch')
 class SavedBillDetailView(View):
 
     template_name="saved_bill_detail.html"

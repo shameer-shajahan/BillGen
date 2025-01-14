@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block main_block %}
-<div class="min-h-screen bg-gray-100 flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
+
+<div class="min-h-screen  flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
     <div class="max-w-4xl w-full space-y-8">
         <form action="" method="post" enctype="multipart/form-data" class="bg-white shadow-lg rounded-lg p-8">
             {% csrf_token %}
@@ -14,57 +15,47 @@
             <!-- Receiver Name -->
             <div class="mb-4">
                 <label for="receiver_name" class="block text-sm font-medium text-gray-700">Name</label>
-                <input 
-                    id="receiver_name"
-                    type="text" 
-                    name="receiver_name" 
-                    placeholder="Enter Name" 
+                <input id="receiver_name" type="text" name="receiver_name" placeholder="Enter Name"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
 
             <!-- Address -->
             <div class="mb-4">
                 <label for="receiver_address" class="block text-sm font-medium text-gray-700">Address</label>
-                <textarea 
-                    id="receiver_address"
-                    name="receiver_address" 
-                    rows="3" 
-                    placeholder="Enter Address" 
+                <textarea id="receiver_address" name="receiver_address" rows="3" placeholder="Enter Address"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
             </div>
 
             <!-- Phone -->
             <div class="mb-4">
                 <label for="receiver_mobile" class="block text-sm font-medium text-gray-700">Phone</label>
-                <input 
-                    id="receiver_mobile"
-                    type="number" 
-                    name="receiver_mobile" 
-                    placeholder="Enter Phone" 
+                <input id="receiver_mobile" type="number" name="receiver_mobile" placeholder="Enter Phone"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
 
             <!-- Email -->
             <div class="mb-6">
                 <label for="receiver_email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input 
-                    id="receiver_email"
-                    type="email" 
-                    name="receiver_email" 
-                    placeholder="Enter Email" 
+                <input id="receiver_email" type="email" name="receiver_email" placeholder="Enter Email"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
 
             <!-- Save Button -->
             <div>
-                <button 
-                    type="submit" 
+                <button type="submit"
                     class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Save
                 </button>
+            </div>
+            <div>
+                <a href="{%url 'shipto'%}"
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-2">
+                    Skip</a>
+
             </div>
 
         </form>
     </div>
 </div>
+
 {% endblock %}

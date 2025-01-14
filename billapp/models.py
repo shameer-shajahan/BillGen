@@ -193,7 +193,7 @@ class ShipTo(models.Model):
 
 class Bill(models.Model):
     
-    bill_obj = models.OneToOneField(Company, on_delete=models.CASCADE, related_name='bills')  # Linked to Company
+    bill_obj = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='bills')  # Linked to Company
     
     invoice_no = models.PositiveIntegerField(unique=True)  # Unique Invoice Number
     
